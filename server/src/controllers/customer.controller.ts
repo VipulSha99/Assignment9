@@ -108,7 +108,7 @@ export class CustomerController {
     @param.path.string('id') id: string,
     @param.filter(Customer, {exclude: 'where'}) filter?: FilterExcludingWhere<Customer>
   ): Promise<Customer> {
-    return this.customerRepository.findById(id, filter);
+    return this.customerRepository.findById(id, {include: ['users']});
   }
 
   @patch('/customers/{id}')
@@ -126,6 +126,7 @@ export class CustomerController {
     })
     customer: Customer,
   ): Promise<void> {
+    customer.updatedAt=new Date();
     await this.customerRepository.updateById(id, customer);
   }
 

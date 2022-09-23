@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {UserModel} from './user.model';
 import { map } from 'rxjs';
-import {environment} from '../environments/environment';
+import {environment} from '../../environments/environment';
+import { UserModel } from './user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +36,8 @@ export class UserService {
   editUser(id:string,userData:{[key: string]: string|number}){
     console.log(userData);
     return this.http.patch(`${environment.apiURL}/users/${id}`,userData);
+  }
+  getSelectedUser(id:string){
+    return this.http.get<UserModel>(`${environment.apiURL}/users/${id}`);
   }
 }
