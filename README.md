@@ -1,6 +1,6 @@
 # Assignment 9
 
-## ✨Tabular Representation in Type Script with  LoopBack Server adding new UI page Customer✨
+## ✨Tabular Representation in Angular with  LoopBack Server adding new UI page Customer✨
 
 # Run code for both client and server separately -
 #### Install dependencies:
