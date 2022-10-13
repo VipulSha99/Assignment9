@@ -1,26 +1,31 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserModel, columnName} from '../user.model';
-import { UserService } from '../user.service';
+import { ActivatedRoute, Params } from '@angular/router';
+import { userColumnName, UserModel } from 'src/app/user/user.model';
+import { UserService } from 'src/app/user/user.service';
 
 @Component({
-  selector: 'app-tabular',
-  templateUrl: './tabular.component.html',
-  styleUrls: ['./tabular.component.css']
+  selector: 'app-user-table',
+  templateUrl: './user-table.component.html',
+  styleUrls: ['./user-table.component.css']
 })
-export class TabularComponent implements OnInit {
+export class UserTableComponent implements OnInit {
+
   prevArray:string[] = [];
   @Input ('userdata') userData:UserModel[];
   saveEnable = false;
-  header = Object.values(columnName);
+  header = Object.values(userColumnName);
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-  }
-
-  onUpdatedData(){
-    this.userService.getUsers().subscribe(newData=>{
-      this.userData = newData;
+    this.route.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if(id){
+        this.userService.getSelectedUser(id.toString()).subscribe(user=> {
+          console.log(user);
+          this.userData = [user];
+        });
+      }
     });
   }
 
@@ -45,11 +50,8 @@ export class TabularComponent implements OnInit {
       editData[event.path[2].cells[j].childNodes[0].name]=event.path[2].cells[j].childNodes[0].value;
       this.prevArray[j]=event.path[2].cells[j].childNodes[0].value;
     }
-    editData["phone_number"]=+editData["phone_number"];
+    editData["phoneNumber"]=+editData["phoneNumber"];
     this.userService.editUser(data.id as string,editData).subscribe(_=>{
-      this.userService.getUsers().subscribe(newData=>{
-        this.userData = newData;
-      });
     });
 
   }
@@ -72,6 +74,5 @@ export class TabularComponent implements OnInit {
       });
     })
   }
-
 
 }

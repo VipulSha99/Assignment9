@@ -108,7 +108,7 @@ export class UserController {
     @param.path.string('id') id: string,
     @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>
   ): Promise<User> {
-    return this.userRepository.findById(id, filter);
+    return this.userRepository.findById(id, {include:["customer","role"]});
   }
 
   @patch('/users/{id}')
@@ -126,6 +126,7 @@ export class UserController {
     })
     user: User,
   ): Promise<void> {
+    user.updatedAt = new Date();
     await this.userRepository.updateById(id, user);
   }
 

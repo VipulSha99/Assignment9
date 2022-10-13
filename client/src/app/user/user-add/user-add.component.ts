@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomerService } from 'src/app/customer.service';
+import { CustomerService } from 'src/app/customer/customer.service';
 import { RoleService } from 'src/app/role.service';
-import { UserService } from 'src/app/user.service';
-import {customer, role, Role} from '../../user.model';
+import { Role, role } from 'src/app/role.model';
+import { customerModel } from 'src/app/customer/customer.model';
+import { UserService } from 'src/app/user/user.service';
 
 @Component({
   selector: 'app-user-add',
@@ -11,11 +12,12 @@ import {customer, role, Role} from '../../user.model';
   styleUrls: ['./user-add.component.css']
 })
 export class UserAddComponent implements OnInit {
+
   @Output () updatedData = new EventEmitter();
   addUserForm: FormGroup;
   addButtonClicked = false;
   role = Role;
-  customers: customer[];
+  customers: customerModel[];
 
   constructor(private userService: UserService,private customerService: CustomerService, private roleService: RoleService) { }
 
@@ -24,11 +26,11 @@ export class UserAddComponent implements OnInit {
       this.customers = newData;
     });
     this.addUserForm = new FormGroup({
-      'first_name': new FormControl(null,[Validators.required]),
-      'middle_name':new FormControl(''),
-      'last_name':new FormControl(null,[Validators.required]),
+      'firstName': new FormControl(null,[Validators.required]),
+      'middleName':new FormControl(''),
+      'lastName':new FormControl(null,[Validators.required]),
       'email':new FormControl(null,[Validators.required,Validators.email]),
-      'phone_number':new FormControl(null,[Validators.required]),
+      'phoneNumber':new FormControl(null,[Validators.required]),
       'customerId':new FormControl(null,[Validators.required]),
       'roleId':new FormControl(null,[Validators.required,this.forbiddenNames.bind(this)]),
       'address':new FormControl(null,[Validators.required])
